@@ -6,19 +6,27 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import com.udacity.gradle.jokeactivity.JokeActivity;
-import com.udacity.gradle.jokes.Joker;
 
 
 public class MainActivity extends ActionBarActivity
 {
+    private EndpointsAsyncTask task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        task = null;
     }
 
+    @Override
+    protected void onDestroy()
+    {
+        if (task != null)
+            task.cancel(true);
+        super.onDestroy();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -47,8 +55,19 @@ public class MainActivity extends ActionBarActivity
 
     public void tellJoke(View view)
     {
-        Joker joker = new Joker();
-        JokeActivity.startActivity(this, joker.getJoke());
+        if (task == null)
+        {
+            task = new EndpointsAsyncTask();
+            task.execute(new iEndPointcallback()
+            {
+                @Override
+                public void endPoints(String result)
+                {
+                    task = null;
+                    JokeActivity.startActivity(MainActivity.this, result);
+                }
+            });
+        }
     }
 
 

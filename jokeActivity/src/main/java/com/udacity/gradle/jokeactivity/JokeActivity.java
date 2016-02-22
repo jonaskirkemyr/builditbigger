@@ -1,6 +1,7 @@
 package com.udacity.gradle.jokeactivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -31,21 +32,9 @@ public class JokeActivity extends ActionBarActivity
 
     }
 
-    public static void startActivity(Fragment fragment, String joke)
-    {
-        Activity a = fragment.getActivity();
-        Intent i = new Intent(a, JokeActivity.class);
+    public static void startActivity(Context context, String joke){
+        Intent i = new Intent(context, JokeActivity.class);
         i.putExtra(KEY_JOKE, joke);
-        a.startActivity(i);
+        context.startActivity(i);
     }
-
-    public static void startActivity(Activity activity, String joke)
-    {
-        Intent i = new Intent(activity, JokeActivity.class);
-        i.putExtra(KEY_JOKE, joke);
-        activity.startActivity(i);
-
-    }
-
-
 }
